@@ -1400,22 +1400,42 @@
       draw();
     })();
 
-    // Contact form handler
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
+   // Contact form handler
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const fname   = document.getElementById('fname').value;
-      const lname   = document.getElementById('lname').value;
-      const email   = document.getElementById('email').value;
-      const company = document.getElementById('company').value;
-      const entity  = document.getElementById('entity').value;
-      const message = document.getElementById('message').value;
 
-      const mailto = `mailto:operations@roomofrequirement.co`
-        + `?subject=New Inquiry from ${encodeURIComponent(fname + ' ' + lname)}`
-        + `&body=${encodeURIComponent(
-            `Name: ${fname} ${lname}\nEmail: ${email}\nCompany: ${company}\nEntity Type: ${entity}\n\nMessage:\n${message}`
-          )}`;
+      const btn = this.querySelector('.form-submit');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
 
-      window.location.href = mailto;
+      const payload = {
+        fname:   document.getElementById('fname').value.trim(),
+        lname:   document.getElementById('lname').value.trim(),
+        email:   document.getElementById('email').value.trim(),
+        company: document.getElementById('company').value.trim(),
+        entity:  document.getElementById('entity').value,
+        message: document.getElementById('message').value.trim()
+      };
 
-      this.style.d
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywWbdIrDkWDjngotRA7wNU3cQru6vRpYNhiquQ7G1LunAsxNpsyaWUDVRpyj2N682W/exec';
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+
+      } catch (err) {
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        alert('Something went wrong. Please email us directly at operations@roomofrequirement.co');
+      }
+    });
+    </script>
+  </body>
+</html>
