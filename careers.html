@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Careers | Room of Requirement</title>
+
+  <!-- Primary SEO -->
+  <meta name="description" content="We're hiring an Operations & Finance Associate in Mumbai to work across our clients and internal operations. Early-career, detail-driven, room to grow.">
+  <link rel="canonical" href="https://roomofrequirement.co/careers.html">
+  <link rel="icon" type="image/svg+xml" href="assets/RoomofRequirement_logo.svg">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Room of Requirement">
+  <meta property="og:title" content="Careers | Room of Requirement">
+  <meta property="og:description" content="Operations & Finance Associate, Mumbai. Early-career, detail-driven, room to grow.">
+  <meta property="og:url" content="https://roomofrequirement.co/careers.html">
+  <meta property="og:image" content="https://roomofrequirement.co/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Room of Requirement: back-office operations for small and mid-sized companies and nonprofits">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Careers | Room of Requirement">
+  <meta name="twitter:description" content="Operations & Finance Associate, Mumbai. Early-career, detail-driven, room to grow.">
+  <meta name="twitter:image" content="https://roomofrequirement.co/assets/og-image.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/styles.css" />
+
+  <!-- Page-scoped styles: careers layout only. Colors pull from the site's existing palette. -->
+  <style>
+    /* Masthead: hero + facts share one tinted band that ends on a hairline */
+    .careers-masthead {
+      background: #E8EFF6 !important;
+      padding: 9.5rem 8vw 0 !important;
+      border-bottom: 1px solid #C8D6E5;
+    }
+    .careers-hero {
+      max-width: 900px;
+    }
+    .careers-hero .hero-eyebrow { color: #2468CC; }
+    .careers-hero h1 {
+      font-family: 'Cormorant', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(2.6rem, 6vw, 4.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      color: #0B1929;
+      margin: 0.6rem 0 0;
+    }
+    .careers-hero h1 em {
+      font-style: italic;
+      color: #4A6080;
+    }
+    .careers-hero .lede {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      line-height: 1.65;
+      color: #4A6080;
+      max-width: 640px;
+      margin: 1.6rem 0 0;
+    }
+
+    /* Quick facts strip: sits inside the tinted masthead */
+    .role-facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      padding: 3rem 0 3.25rem;
+      margin-top: 2.75rem;
+      border-top: 1px solid #C8D6E5;
+    }
+    .role-fact-label {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #4A6080;
+      margin-bottom: 0.35rem;
+    }
+    .role-fact-value {
+      font-family: 'Cormorant', Georgia, serif;
+      font-weight: 500;
+      font-size: 1.5rem;
+      color: #0B1929;
+      line-height: 1.15;
+    }
+
+    .careers-body { padding: 4.5rem 8vw 0; max-width: 1100px; }
+
+    .careers-block { margin-bottom: 3.5rem; }
+    .careers-block h2 {
+      font-family: 'Cormorant', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(1.7rem, 3vw, 2.3rem);
+      color: #0B1929;
+      line-height: 1.1;
+      margin: 0 0 1.2rem;
+    }
+    .careers-block h2 em { font-style: italic; color: #4A6080; }
+    .careers-block > p {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #4A6080;
+      max-width: 680px;
+      margin: 0 0 1rem;
+    }
+
+    .role-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.4rem 0 0;
+      display: grid;
+      gap: 1.1rem;
+      max-width: 760px;
+    }
+    .role-list li {
+      position: relative;
+      padding-left: 1.7rem;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 1.02rem;
+      line-height: 1.6;
+      color: #4A6080;
+    }
+    .role-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #2468CC;
+    }
+    .role-list li strong {
+      color: #0B1929;
+      font-weight: 500;
+    }
+
+    .careers-cta {
+      margin: 1rem 8vw 7rem;
+      max-width: 1100px;
+      background: #0B1929;
+      border-radius: 4px;
+      padding: 3rem clamp(1.6rem, 4vw, 3.5rem);
+    }
+    .careers-cta h2 {
+      font-family: 'Cormorant', Georgia, serif;
+      font-weight: 500;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      color: #F8FAFB;
+      margin: 0 0 0.8rem;
+      line-height: 1.1;
+    }
+    .careers-cta h2 em { font-style: italic; color: #C8D6E5; }
+    .careers-cta p {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 300;
+      font-size: 1.05rem;
+      line-height: 1.65;
+      color: #C8D6E5;
+      max-width: 560px;
+      margin: 0 0 1.8rem;
+    }
+    .careers-cta a {
+      display: inline-block;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-weight: 500;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      background: #2468CC;
+      color: #F8FAFB;
+      text-decoration: none;
+      padding: 0.9rem 2rem;
+      border-radius: 3px;
+      transition: background 0.2s ease;
+    }
+    .careers-cta a:hover { background: #1B3A6B; }
+    .careers-cta .cta-email {
+      display: block;
+      margin-top: 1.1rem;
+      font-size: 0.9rem;
+      color: #4A6080;
+    }
+    .careers-cta .cta-email a {
+      background: none;
+      padding: 0;
+      color: #C8D6E5;
+      font-weight: 400;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .careers-cta .cta-email a:hover { background: none; color: #F8FAFB; }
+
+    @media (max-width: 768px) {
+      .careers-masthead { padding: 7rem 5% 0 !important; }
+      .careers-body { padding: 3.5rem 5% 0; }
+      .role-facts { gap: 1.6rem 2.5rem; padding: 2.25rem 0 2.5rem; margin-top: 2rem; }
+      .careers-cta { margin: 1rem 5% 5rem; padding: 2.25rem 1.5rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">
+      <svg width="28" height="38" viewBox="0 0 60 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="22" width="60" height="60" rx="0" fill="#1B3A6B"/>
+        <path d="M0,22 Q0,0 30,0 Q60,0 60,22 Z" fill="#1B3A6B"/>
+        <rect x="7" y="28" width="46" height="48" rx="2" fill="#2468CC"/>
+        <path d="M7,28 Q7,10 30,10 Q53,10 53,28 Z" fill="#4A99E8"/>
+        <circle cx="42" cy="56" r="3" fill="#C8D6E5"/>
+        <line x1="7" y1="50" x2="53" y2="50" stroke="#4A99E8" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+      <div class="nav-logo-text">Room <span class="of">of</span><br>Requirement</div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/#clients">Clients</a></li>
+      <li><a href="/#how">How We Work</a></li>
+      <li><a href="/#about">About</a></li>
+    </ul>
+    <a class="nav-cta" href="/#contact">Contact Us</a>
+    <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileDrawer">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE DRAWER -->
+  <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+  <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true" aria-label="Mobile navigation">
+    <div class="mobile-drawer-brand">
+      <svg width="40" height="55" viewBox="0 0 60 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="22" width="60" height="60" rx="0" fill="#1B3A6B"/>
+        <path d="M0,22 Q0,0 30,0 Q60,0 60,22 Z" fill="#1B3A6B"/>
+        <rect x="7" y="28" width="46" height="48" rx="2" fill="#2468CC"/>
+        <path d="M7,28 Q7,10 30,10 Q53,10 53,28 Z" fill="#4A99E8"/>
+        <circle cx="42" cy="56" r="3" fill="#C8D6E5"/>
+        <line x1="7" y1="50" x2="53" y2="50" stroke="#4A99E8" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+      <div class="mobile-drawer-brand-text">Room <span class="of">of</span><br>Requirement</div>
+    </div>
+    <ul class="mobile-drawer-links">
+      <li><a href="/#services" data-drawer-link>Services</a></li>
+      <li><a href="/#clients" data-drawer-link>Clients</a></li>
+      <li><a href="/#how" data-drawer-link>How We Work</a></li>
+      <li><a href="/#about" data-drawer-link>About</a></li>
+    </ul>
+    <a class="mobile-drawer-cta" href="/#contact" data-drawer-link>Contact Us</a>
+  </aside>
+
+  <!-- MASTHEAD (hero + quick facts) -->
+  <section class="careers-masthead">
+    <div class="careers-hero">
+      <p class="hero-eyebrow">Careers · Mumbai</p>
+      <h1>Operations &amp; Finance<br><em>Associate.</em></h1>
+      <p class="lede">
+        We run the back office for a set of US- and India-based startups, growing companies, and nonprofits. We're looking for someone in Mumbai to work closely with the founder across our clients and our own operations: an early-career role for a detail-driven person we can invest in and grow with.
+      </p>
+    </div>
+
+    <!-- QUICK FACTS -->
+    <div class="role-facts">
+      <div>
+        <div class="role-fact-label">Location</div>
+        <div class="role-fact-value">Mumbai · Flexible</div>
+      </div>
+      <div>
+        <div class="role-fact-label">Type</div>
+        <div class="role-fact-value">Full-time</div>
+      </div>
+      <div>
+        <div class="role-fact-label">Compensation</div>
+        <div class="role-fact-value">From ₹50,000/mo</div>
+      </div>
+      <div>
+        <div class="role-fact-label">Level</div>
+        <div class="role-fact-value">Early career</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BODY -->
+  <div class="careers-body">
+
+    <div class="careers-block">
+      <h2>The role</h2>
+      <p>This is a broad, hands-on job. On any given day you might reconcile a client's books, chase down an invoice, sort out a payroll question, help close the month, or keep a project moving. You'll work directly with the founder across our client base and our internal operations, with real exposure to how a small, fast-moving firm actually runs.</p>
+      <p>It suits someone who likes owning the details, works quickly, and wants to take on more responsibility over time. We'd rather find the right person early and grow the role around them than hire for a fixed job description.</p>
+    </div>
+
+    <div class="careers-block">
+      <h2>What you'll do</h2>
+      <ul class="role-list">
+        <li><strong>Day-to-day accounting</strong>: reconciliation, AP/AR, expense tracking, and month-end close across our clients.</li>
+        <li><strong>Client operations support</strong>: working across our full client base (startups, LLPs, LLCs, and nonprofits) on their finance and operations needs.</li>
+        <li><strong>Keeping things running</strong>: vendor coordination, filings, records, and the various loose ends of a small firm.</li>
+        <li><strong>Founder support</strong>: some personal accounting and travel and logistics coordination.</li>
+      </ul>
+    </div>
+
+    <div class="careers-block">
+      <h2>Who you are</h2>
+      <ul class="role-list">
+        <li><strong>Early in your career and eager to learn</strong>: someone we can invest in and grow with.</li>
+        <li><strong>Some accounting or bookkeeping experience</strong>: QuickBooks is a plus. A CA, CA-Inter, or CA in progress is welcome but not required.</li>
+        <li><strong>Detail-oriented</strong>: comfortable with numbers, and you catch what others miss.</li>
+        <li><strong>Organized and reliable</strong>, with strong follow-through.</li>
+        <li><strong>Good written English</strong>: most of our clients are US-based.</li>
+        <li><strong>Responsive and reachable</strong>: comfortable with the pace of a small firm where priorities shift and things move quickly.</li>
+        <li><strong>A hustler</strong>: you take ownership, figure things out, and don't wait to be told.</li>
+      </ul>
+    </div>
+
+    <div class="careers-block">
+      <h2>Compensation &amp; growth</h2>
+      <p>₹50,000 per month to start, adjusted for experience, with clear room to grow as you take on more. This is meant to be a role you expand from. You'll learn the finance and operations side of a real consulting business directly from the founder, working with US and India clients from day one.</p>
+    </div>
+
+  </div>
+
+  <!-- CTA -->
+  <div class="careers-cta">
+    <h2>Think this is <em>you?</em></h2>
+    <p>Send a short note about yourself and why this role fits, along with your CV. No need for anything formal. Tell us what you've worked on and what you're looking for.</p>
+    <a href="mailto:mohit@roomofrequirement.co?subject=Operations%20%26%20Finance%20Associate%20%E2%80%94%20Application">Apply by email</a>
+    <span class="cta-email">Or write to <a href="mailto:mohit@roomofrequirement.co">mohit@roomofrequirement.co</a></span>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">
+      <svg width="24" height="32" viewBox="0 0 60 82" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="22" width="60" height="60" rx="0" fill="#1B3A6B"/>
+        <path d="M0,22 Q0,0 30,0 Q60,0 60,22 Z" fill="#1B3A6B"/>
+        <rect x="7" y="28" width="46" height="48" rx="2" fill="#2468CC"/>
+        <path d="M7,28 Q7,10 30,10 Q53,10 53,28 Z" fill="#4A99E8"/>
+        <circle cx="42" cy="56" r="3" fill="#C8D6E5"/>
+      </svg>
+      <div class="footer-logo-text">Room <span class="of">of</span><br>Requirement</div>
+    </div>
+    <ul class="footer-links">
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/#clients">Clients</a></li>
+      <li><a href="/#how">How We Work</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#contact">Contact</a></li>
+      <li><a href="/careers.html">Careers</a></li>
+    </ul>
+    <div class="footer-copy">© 2026 Room of Requirement. All rights reserved.</div>
+  </footer>
+
+  <script src="assets/main.js" defer></script>
+</body>
+</html>
