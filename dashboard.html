@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Financial dashboard case study | Room of Requirement</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="A live, clickable demo of the financial dashboard Room of Requirement builds for growing companies. Revenue, projects, spend, tax and cash in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+/* ── Page-specific styles for the dashboard case study ───────────── */
+.dash-hero {
+  background: var(--navy);
+  padding: 150px 5% 90px;
+  position: relative;
+  overflow: hidden;
+}
+.dash-hero::after {
+  content: '';
+  position: absolute;
+  width: 640px; height: 640px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(36,104,204,0.16) 0%, transparent 70%);
+  top: -220px; right: -160px;
+  pointer-events: none;
+}
+.dash-hero .hero-inner { max-width: 820px; }
+.dash-hero .hero-sub { margin-bottom: 2.2rem; }
+
+.demo-wrap { background: var(--mist) !important; padding: 0 5% 80px; }
+.demo-shell {
+  max-width: 1240px; margin: -48px auto 0;
+  background: #fff;
+  border: 1px solid var(--silver);
+  border-radius: var(--r-lg);
+  box-shadow: 0 30px 60px -30px rgba(11,25,41,0.35);
+  position: relative; z-index: 2;
+  overflow: hidden;
+}
+.demo-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  padding: 1.25rem 1.75rem;
+  border-bottom: 1px solid var(--silver);
+}
+.demo-co { font-family: var(--f-display); font-size: 1.55rem; font-weight: 600; color: var(--navy); line-height: 1.1; }
+.demo-co span { display: block; font-family: var(--f-body); font-size: 0.8rem; font-weight: 400; color: var(--slate); margin-top: 0.2rem; }
+.demo-flag {
+  font-size: 0.78rem; color: var(--sienna-ink);
+  background: #FBF1E6; border: 1px solid #EBC9A3;
+  padding: 0.4rem 0.8rem; border-radius: var(--r-sm);
+}
+
+.tabs {
+  display: flex; gap: 0.25rem; overflow-x: auto;
+  padding: 0 1.25rem; border-bottom: 1px solid var(--silver);
+  scrollbar-width: thin;
+}
+.tab {
+  font-family: var(--f-body); font-size: 0.88rem; font-weight: 500;
+  color: var(--slate); background: none; border: none;
+  padding: 0.95rem 0.85rem 0.85rem; cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+}
+.tab:hover { color: var(--navy); }
+.tab[aria-selected="true"] { color: var(--navy); border-bottom-color: var(--sienna); }
+.tab:focus-visible, .ask-q:focus-visible, .btn-row button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.panel-body { padding: 1.75rem; }
+.panel-body[hidden] { display: none; }
+
+.grid { display: grid; gap: 1.25rem; }
+.g-4 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+.g-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.g-21 { grid-template-columns: minmax(0,2fr) minmax(0,1fr); }
+.mt { margin-top: 1.25rem; }
+
+.box { border: 1px solid #DCE5EF; border-radius: var(--r); padding: 1.2rem 1.3rem; background: #fff; min-width: 0; }
+.box h3 { font-family: var(--f-body); font-size: 0.95rem; font-weight: 600; color: var(--navy); margin-bottom: 0.9rem; }
+.box h3 small { font-weight: 400; color: var(--slate); font-size: 0.8rem; margin-left: 0.35rem; }
+
+.kpi-label { font-size: 0.82rem; color: var(--slate); }
+.kpi-num { font-family: var(--f-display); font-size: 2.3rem; font-weight: 600; color: var(--navy); line-height: 1.05; margin: 0.35rem 0 0.3rem; font-variant-numeric: lining-nums tabular-nums; }
+.kpi-note { font-size: 0.8rem; color: var(--slate); }
+.up { color: #2E7D4F; }
+.down { color: #B3412E; }
+
+.attn { list-style: none; }
+.attn li { display: grid; grid-template-columns: 10px 1fr; gap: 0.75rem; padding: 0.7rem 0; border-top: 1px solid #E6EDF4; font-size: 0.88rem; line-height: 1.45; color: var(--navy); }
+.attn li:first-child { border-top: none; padding-top: 0; }
+.attn .dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 0.45rem; background: var(--sienna); }
+.attn .dot.lo { background: var(--slate-light); }
+.attn span.sub { display: block; color: var(--slate); font-size: 0.8rem; }
+
+.legend { display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: 0.78rem; color: var(--slate); margin-bottom: 0.6rem; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 0.35rem; vertical-align: -1px; }
+.legend i.line { height: 2px; border-radius: 0; vertical-align: 3px; width: 16px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font-family: var(--f-body); font-size: 11px; fill: var(--slate); }
+
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.86rem; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-weight: 500; color: var(--slate); font-size: 0.78rem; padding: 0 0.7rem 0.55rem; border-bottom: 1px solid var(--silver); white-space: nowrap; }
+td { padding: 0.6rem 0.7rem; border-bottom: 1px solid #E6EDF4; color: var(--navy); vertical-align: top; }
+th.n, td.n { text-align: right; white-space: nowrap; }
+tr.total td { font-weight: 600; border-bottom: none; }
+td .sub { display: block; color: var(--slate); font-size: 0.78rem; }
+
+.pill { display: inline-block; font-size: 0.74rem; font-weight: 500; padding: 0.15rem 0.55rem; border-radius: 99px; white-space: nowrap; }
+.p-done { background: #E3F0E8; color: #2E6A47; }
+.p-on { background: var(--accent-pale); color: var(--blue); }
+.p-signed { background: #EEF3F8; color: var(--slate); border: 1px solid var(--silver); }
+.p-prop { background: #fff; color: var(--slate); border: 1px dashed var(--slate-light); }
+.p-warn { background: #FBF1E6; color: var(--sienna-ink); }
+
+.hbar { display: grid; grid-template-columns: minmax(110px, 38%) 1fr auto; gap: 0.75rem; align-items: center; font-size: 0.85rem; padding: 0.38rem 0; }
+.hbar .track { height: 10px; background: #EEF3F8; border-radius: 99px; overflow: hidden; }
+.hbar .fill { height: 100%; background: var(--blue); border-radius: 99px; }
+.hbar .val { font-variant-numeric: tabular-nums; color: var(--navy); min-width: 4.5rem; text-align: right; }
+
+.btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.btn-row button {
+  font-family: var(--f-body); font-size: 0.82rem; font-weight: 500;
+  border: 1px solid var(--silver); background: #fff; color: var(--slate);
+  padding: 0.4rem 0.85rem; border-radius: 99px; cursor: pointer;
+}
+.btn-row button[aria-pressed="true"] { background: var(--navy); color: var(--white); border-color: var(--navy); }
+
+/* Ask */
+.ask-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.6fr); gap: 1.5rem; }
+.ask-intro { font-size: 0.9rem; color: var(--slate); line-height: 1.6; margin-bottom: 1rem; }
+.ask-q {
+  display: block; width: 100%; text-align: left;
+  font-family: var(--f-body); font-size: 0.9rem; color: var(--navy);
+  background: #fff; border: 1px solid var(--silver); border-radius: var(--r);
+  padding: 0.8rem 1rem; margin-bottom: 0.55rem; cursor: pointer;
+  transition: border-color var(--transition);
+}
+.ask-q:hover { border-color: var(--sienna); }
+.ask-q[aria-pressed="true"] { border-color: var(--sienna); background: #FBF6F0; }
+.chat { background: var(--mist); border-radius: var(--r); padding: 1.25rem; min-height: 320px; display: flex; flex-direction: column; gap: 0.8rem; }
+.msg { max-width: 92%; padding: 0.8rem 1rem; border-radius: var(--r); font-size: 0.9rem; line-height: 1.6; white-space: pre-line; }
+.msg.user { align-self: flex-end; background: var(--navy); color: var(--white); }
+.msg.bot { align-self: flex-start; background: #fff; color: var(--navy); border: 1px solid #DCE5EF; }
+.chat-empty { margin: auto; color: var(--slate); font-size: 0.9rem; text-align: center; max-width: 30ch; }
+
+/* Case study */
+.case { background: var(--white) !important; padding: 90px 5%; }
+.case-inner { max-width: 1240px; margin: 0 auto; }
+.case-cols { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 2.5rem; margin-top: 2.75rem; }
+.case-cols h3 { font-family: var(--f-display); font-size: 1.55rem; font-weight: 600; color: var(--navy); margin-bottom: 0.8rem; }
+.case-cols p, .case-cols li { font-size: 0.95rem; font-weight: 300; line-height: 1.75; color: var(--slate); }
+.case-cols ul { list-style: none; }
+.case-cols li { padding: 0.55rem 0; border-top: 1px solid var(--silver); }
+.case-cols li:first-child { border-top: none; padding-top: 0; }
+.case-cols strong { font-weight: 500; color: var(--navy); }
+
+.dash-cta { background: var(--navy) !important; padding: 80px 5%; text-align: left; }
+.dash-cta-inner { max-width: 1240px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.dash-cta h2 { font-family: var(--f-display); font-size: clamp(1.9rem, 3.5vw, 2.8rem); font-weight: 600; color: var(--white); line-height: 1.15; max-width: 22ch; }
+.dash-cta p { color: var(--slate-light); font-weight: 300; margin-top: 0.8rem; max-width: 52ch; line-height: 1.7; }
+
+@media (max-width: 1024px) {
+  .g-4 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .g-21, .g-2, .ask-grid, .case-cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .g-4 { grid-template-columns: 1fr; }
+  .panel-body { padding: 1.1rem; }
+  .demo-top { padding: 1rem 1.1rem; }
+  .kpi-num { font-size: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-eyebrow, .hero-headline, .hero-sub, .hero-actions { animation: none !important; opacity: 1 !important; }
+}
+</style>
+</head>
+<body>
+
+<nav aria-label="Main">
+  <a class="nav-logo" href="index.html">
+    <svg width="30" height="41" viewBox="0 0 60 82" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="0" y="22" width="60" height="60" fill="#1B3A6B"/>
+      <path d="M0,22 Q0,0 30,0 Q60,0 60,22 Z" fill="#1B3A6B"/>
+      <rect x="7" y="28" width="46" height="48" rx="2" fill="#BB7125"/>
+      <path d="M7,28 Q7,10 30,10 Q53,10 53,28 Z" fill="#EEB480"/>
+      <circle cx="42" cy="56" r="3" fill="#EBD3A2"/>
+      <line x1="7" y1="50" x2="53" y2="50" stroke="#EEB480" stroke-width="0.5" opacity="0.4"/>
+    </svg>
+    <span class="nav-logo-text">Room <span class="of">of</span> Requirement</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#clients">Clients</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <a class="nav-cta" href="index.html#contact">Get in touch</a>
+</nav>
+
+<header class="dash-hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Case study</p>
+    <h1 class="hero-headline">Every number a small company runs on, on one page.</h1>
+    <p class="hero-sub">We built this dashboard for a US research firm whose revenue, projects, card spend, taxes and cash lived in five different places. The demo below runs on made-up data, so click through all of it.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#demo">Try the demo</a>
+      <a class="btn-ghost" href="#case">Read the case study</a>
+    </div>
+  </div>
+</header>
+
+<section class="demo-wrap" id="demo" aria-label="Interactive dashboard demo">
+  <div class="demo-shell">
+    <div class="demo-top">
+      <div class="demo-co">Palimpsest Research
+        <span>2026 financial dashboard, actuals through October</span>
+      </div>
+      <div class="demo-flag">Demo with fictional data</div>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Dashboard sections">
+      <button class="tab" role="tab" id="t-overview" aria-controls="p-overview" aria-selected="true">Overview</button>
+      <button class="tab" role="tab" id="t-projects" aria-controls="p-projects" aria-selected="false" tabindex="-1">Revenue &amp; projects</button>
+      <button class="tab" role="tab" id="t-spend" aria-controls="p-spend" aria-selected="false" tabindex="-1">Spend</button>
+      <button class="tab" role="tab" id="t-tax" aria-controls="p-tax" aria-selected="false" tabindex="-1">Tax</button>
+      <button class="tab" role="tab" id="t-recon" aria-controls="p-recon" aria-selected="false" tabindex="-1">Reconciliation</button>
+      <button class="tab" role="tab" id="t-ask" aria-controls="p-ask" aria-selected="false" tabindex="-1">Ask about the numbers</button>
+    </div>
+
+    <div class="panel-body" role="tabpanel" id="p-overview" aria-labelledby="t-overview"></div>
+    <div class="panel-body" role="tabpanel" id="p-projects" aria-labelledby="t-projects" hidden></div>
+    <div class="panel-body" role="tabpanel" id="p-spend" aria-labelledby="t-spend" hidden></div>
+    <div class="panel-body" role="tabpanel" id="p-tax" aria-labelledby="t-tax" hidden></div>
+    <div class="panel-body" role="tabpanel" id="p-recon" aria-labelledby="t-recon" hidden></div>
+    <div class="panel-body" role="tabpanel" id="p-ask" aria-labelledby="t-ask" hidden></div>
+  </div>
+</section>
+
+<section class="case" id="case">
+  <div class="case-inner">
+    <p class="section-label">How it came together</p>
+    <h2 class="section-title">Built from the books the company already had.</h2>
+    <div class="case-cols">
+      <div>
+        <h3>Before</h3>
+        <p>The firm’s revenue tracker, projections model, accounting system, corporate card and brokerage account each told a slightly different story. Answering “how much cash will we have in December?” meant an afternoon of spreadsheets, and nobody fully trusted the answer.</p>
+      </div>
+      <div>
+        <h3>What we built</h3>
+        <ul>
+          <li><strong>One overview</strong> with year-to-date results, the full-year outlook, open receivables, cash and a short list of what needs attention.</li>
+          <li><strong>Project-level revenue</strong> showing completed, ongoing and upcoming work against the plan, plus anything finished but not yet invoiced.</li>
+          <li><strong>Tie-outs</strong> that check the tracker, the model and the accounting system against each other, line by line.</li>
+          <li><strong>An assistant</strong> that answers questions using the dashboard’s own data.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What changed</h3>
+        <ul>
+          <li>After reconciling the model, the mid-year cash forecast landed <strong>within 1.5% of actual</strong>.</li>
+          <li>Finished-but-unbilled work now surfaces the week it’s done, not at year end.</li>
+          <li>Sales tax returns are checked against how payments were booked, so mismatches get caught before the accountant finds them.</li>
+          <li>Leadership checks one page instead of asking for a report.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="dash-cta">
+  <div class="dash-cta-inner">
+    <div>
+      <h2>Want this view of your own company?</h2>
+      <p>We connect it to the tools you already use, reconcile the numbers once, and keep it current every month.</p>
+    </div>
+    <a class="btn-primary" href="index.html#contact">Book a call</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">
+    <svg width="20" height="27" viewBox="0 0 60 82" fill="none" aria-hidden="true">
+      <rect x="0" y="22" width="60" height="60" fill="#1B3A6B"/>
+      <path d="M0,22 Q0,0 30,0 Q60,0 60,22 Z" fill="#1B3A6B"/>
+      <rect x="7" y="28" width="46" height="48" rx="2" fill="#BB7125"/>
+      <path d="M7,28 Q7,10 30,10 Q53,10 53,28 Z" fill="#EEB480"/>
+    </svg>
+    <span class="footer-logo-text">Room <span class="of">of</span> Requirement</span>
+  </div>
+  <ul class="footer-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 Room of Requirement</p>
+</footer>
+
+<script>
+(() => {
+  /* ── Fictional data (all figures in $ thousands unless noted) ── */
+  const M = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const T = 9; // index of last closed month (October)
+  const plan   = [290,300,320,330,350,340,330,360,380,390,370,340];
+  const actual = [262,318,301,365,342,371,309,388,402,355];
+  const sga    = [148,151,149,156,152,158,150,161,159,163];
+  const sgaPlan = 155;
+  const COGS = 0.39;
+  const cashActual = [1198,1231,1252,1218,1240,1226,1209,1268,1301,1287];
+  const cashPlan   = [1215,1238,1264,1240,1262,1250,1236,1270,1306,1342,1371,1384];
+  const ar = { 'Current': 412, '1–30 days': 186, '31–60 days': 74, '61–90 days': 22, 'Over 90 days': 31 };
+  const arJune = 600;
+  const investments = 850;
+
+  const projects = [
+    { c:'Ottery Health Network', n:'Patient experience tracker, wave 3', r:64, m:8, s:'done', billed:true },
+    { c:'Airstrip Policy Institute', n:'Voter attitudes panel', r:118, m:9, s:'done', billed:true },
+    { c:'Grimmauld Analytics', n:'Text-to-web survey, Midwest', r:41, m:9, s:'done', billed:false },
+    { c:'Whinging Valley University', n:'Student wellbeing study', r:29, m:9, s:'done', billed:false },
+    { c:'Chestnut Tree Partners', n:'Rapid poll, three states', r:16, m:9, s:'done', billed:false },
+    { c:'Fawkes Strategies', n:'Message testing, six waves', r:92, m:10, s:'on' },
+    { c:'Two Minutes Media', n:'Audience panel refresh', r:77, m:10, s:'on' },
+    { c:'Parsons & Syme', n:'Customer satisfaction pulse', r:54, m:10, s:'on' },
+    { c:'Chestnut Tree Partners', n:'Post-election rapid poll', r:75, m:10, s:'signed' },
+    { c:'Ottery Health Network', n:'Patient experience tracker, wave 4', r:66, m:11, s:'signed' },
+    { c:'Airstrip Policy Institute', n:'Post-election recontact', r:88, m:11, s:'prop' },
+    { c:'Grimmauld Analytics', n:'Q1 tracker kickoff', r:60, m:11, s:'prop' },
+  ];
+  const statusName = { done:'Completed', on:'Ongoing', signed:'Signed', prop:'Proposal' };
+  const statusCls = { done:'p-done', on:'p-on', signed:'p-signed', prop:'p-prop' };
+
+  const clients = [
+    ['Ottery Health Network', 742, 720],
+    ['Airstrip Policy Institute', 688, 700],
+    ['Fawkes Strategies', 571, 560],
+    ['Grimmauld Analytics', 512, 500],
+    ['Two Minutes Media', 403, 420],
+    ['Chestnut Tree Partners', 287, 290],
+    ['Whinging Valley University', 210, 200],
+  ];
+  const sgaLines = [
+    ['Salaries and payroll taxes', 1060, 1052],
+    ['Contractors', 182, 191],
+    ['Software and data', 96, 104],
+    ['Legal and accounting', 74, 81],
+    ['Rent and office', 60, 60],
+    ['Insurance', 42, 40],
+    ['Travel', 36, 19],
+  ];
+  // Card spend, October, in dollars
+  const cardTypes = [['Messaging carrier fees',21380],['Software',8420],['Travel',3960],['Advertising',2500],['Meals',1140],['Office',610]];
+  const merchants = [['Floo Messaging',21380,14],['Pensieve Docs',2160,1],['Thestral Airways',2840,3],['Prophet Media Ads',2500,2],['Speakwrite',1290,1],['Mirror Meet',640,1],['Cauldron Inn',1120,2]];
+  const uncategorized = [['Oct 3','PAYPAL *OWLERY SUPPLY',240.00],['Oct 11','FLOURISH BOOKS LTD',63.12],['Oct 19','WWW.MINIPAX.IO',45.00],['Oct 24','SQ *THREE BROOMS CAFE',18.50]];
+  const vendors = [['Goldstein Payroll','Payroll',104200,'Monthly'],['Hedwig Field Services','Contractors',19100,'Twice monthly'],['Ollivander & Bones CPAs','Legal and accounting',4500,'Monthly'],['Victory Mansions LLC','Rent and office',6000,'Monthly'],['Burrow Insurance Brokers','Insurance',4000,'Quarterly']];
+  const salesTax = [
+    ['District of Columbia', 1842, 1842],
+    ['Washington', 2416, 2204],
+    ['Texas', 960, 960],
+    ['Ohio', 0, 0],
+  ];
+
+  /* ── Helpers ── */
+  const sum = a => a.reduce((x,y)=>x+y,0);
+  const k = v => {
+    const neg = v < 0; v = Math.abs(v);
+    const s = v >= 1000 ? '$' + (v/1000).toFixed(2).replace(/\.?0+$/,'') + 'M' : '$' + Math.round(v) + 'K';
+    return (neg ? '−' : '') + s;
+  };
+  const usd = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: v % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  const pct = v => (v >= 0 ? '+' : '−') + Math.abs(v*100).toFixed(1) + '%';
+  const sign = v => (v >= 0 ? '+' : '−') + k(Math.abs(v)).replace('$','$');
+  const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+  /* ── Derived figures ── */
+  const ytdA = sum(actual), ytdP = sum(plan.slice(0,T+1));
+  const booked = m => sum(projects.filter(p => p.m === m && p.s !== 'done').map(p => p.r));
+  const nov = booked(10), dec = booked(11);
+  const outlook = ytdA + nov + dec, fyPlan = sum(plan);
+  const cogs = actual.map(a => Math.round(a*COGS));
+  const ebitda = actual.map((a,i) => a - cogs[i] - sga[i]);
+  const ytdE = sum(ebitda);
+  const fyE = ytdE + Math.round((nov+dec)*(1-COGS)) - sgaPlan*2;
+  const planE = Math.round(fyPlan*(1-COGS)) - sgaPlan*12;
+  const arTotal = sum(Object.values(ar));
+  const unbilled = projects.filter(p => p.s==='done' && !p.billed);
+  const unbilledSum = sum(unbilled.map(p=>p.r));
+  const fedTax = Math.round(fyE*0.21), stTax = Math.round(fyE*0.07);
+  const fedQ = Math.round(fedTax/4), stQ = Math.round(stTax/4);
+  const cashGap = cashActual[T] - cashPlan[T];
+  const breakEven = Math.round((sga[T]) / (1-COGS));
+  const stDiffs = salesTax.filter(r => r[1] !== r[2]);
+
+  /* ── SVG charts ── */
+  function revChart() {
+    const W=720, H=260, L=44, B=28, top=12, n=12, bw=(W-L-10)/n;
+    const max = 450, y = v => top + (H-top-B)*(1 - v/max);
+    let g = '';
+    [0,100,200,300,400].forEach(v => { g += `<line x1="${L}" x2="${W-6}" y1="${y(v)}" y2="${y(v)}" stroke="#E6EDF4"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${v ? '$'+v+'K' : '0'}</text>`; });
+    let bars = '';
+    for (let i=0;i<n;i++){
+      const x = L + i*bw + bw*0.18, w = bw*0.64;
+      const v = i<=T ? actual[i] : (i===10?nov:dec);
+      const fill = i<=T ? '#BB7125' : 'url(#hatch)';
+      bars += `<rect x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="2" fill="${fill}" ${i>T?'stroke="#BB7125" stroke-width="1"':''}><title>${M[i]}: ${i<=T?'actual':'booked'} ${k(v)}, plan ${k(plan[i])}</title></rect>`;
+      bars += `<text x="${L+i*bw+bw/2}" y="${H-8}" text-anchor="middle">${M[i]}</text>`;
+    }
+    const pts = plan.map((v,i)=>`${L+i*bw+bw/2},${y(v)}`).join(' ');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly revenue: actual and booked versus plan">
+      <defs><pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#FBF1E6"/><line x1="0" y1="0" x2="0" y2="6" stroke="#DDA772" stroke-width="2"/></pattern></defs>
+      ${g}${bars}<polyline points="${pts}" fill="none" stroke="#1B3A6B" stroke-width="2"/>
+      ${plan.map((v,i)=>`<circle cx="${L+i*bw+bw/2}" cy="${y(v)}" r="3" fill="#fff" stroke="#1B3A6B" stroke-width="1.5"/>`).join('')}
+    </svg>`;
+  }
+  function cashChart() {
+    const W=720, H=240, L=52, B=28, top=12, n=12, step=(W-L-20)/(n-1);
+    const lo=1150, hi=1400, y = v => top + (H-top-B)*(1-(v-lo)/(hi-lo)), x = i => L + i*step;
+    let g='';
+    [1150,1200,1250,1300,1350,1400].forEach(v => { g += `<line x1="${L}" x2="${W-10}" y1="${y(v)}" y2="${y(v)}" stroke="#E6EDF4"/><text x="${L-8}" y="${y(v)+4}" text-anchor="end">${k(v)}</text>`; });
+    M.forEach((m,i)=> g += `<text x="${x(i)}" y="${H-8}" text-anchor="middle">${m}</text>`);
+    const p = cashPlan.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    const a = cashActual.map((v,i)=>`${x(i)},${y(v)}`).join(' ');
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Cash position versus projection">
+      ${g}<polyline points="${p}" fill="none" stroke="#1B3A6B" stroke-width="2" stroke-dasharray="5 4"/>
+      <polyline points="${a}" fill="none" stroke="#BB7125" stroke-width="2.5"/>
+      ${cashActual.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="3.2" fill="#BB7125"><title>${M[i]}: actual ${k(v)}, projected ${k(cashPlan[i])}</title></circle>`).join('')}
+    </svg>`;
+  }
+  const hbars = (rows, fmt) => {
+    const mx = Math.max(...rows.map(r=>r[1]));
+    return rows.map(r => `<div class="hbar"><span>${esc(r[0])}</span><span class="track"><span class="fill" style="display:block;width:${(r[1]/mx*100).toFixed(1)}%"></span></span><span class="val">${fmt(r[1])}</span></div>`).join('');
+  };
+
+  /* ── Panels ── */
+  const P = {};
+  P.overview = () => `
+    <div class="grid g-4">
+      <div class="box"><div class="kpi-label">Revenue, Jan–Oct</div><div class="kpi-num">${k(ytdA)}</div><div class="kpi-note"><span class="${ytdA>=ytdP?'up':'down'}">${pct(ytdA/ytdP-1)}</span> vs plan of ${k(ytdP)}</div></div>
+      <div class="box"><div class="kpi-label">Full-year outlook</div><div class="kpi-num">${k(outlook)}</div><div class="kpi-note"><span class="down">${k(outlook-fyPlan)}</span> vs plan of ${k(fyPlan)}</div></div>
+      <div class="box"><div class="kpi-label">EBITDA, Jan–Oct</div><div class="kpi-num">${k(ytdE)}</div><div class="kpi-note">${(ytdE/ytdA*100).toFixed(1)}% margin</div></div>
+      <div class="box"><div class="kpi-label">Cash and investments</div><div class="kpi-num">${k(cashActual[T]+investments)}</div><div class="kpi-note">${k(cashActual[T])} cash, ${k(investments)} in Treasuries and CDs</div></div>
+    </div>
+    <div class="grid g-21 mt">
+      <div class="box chart"><h3>Monthly revenue</h3>
+        <div class="legend"><span><i style="background:#BB7125"></i>Actual</span><span><i style="background:#FBF1E6;border:1px solid #BB7125"></i>Booked</span><span><i class="line" style="background:#1B3A6B"></i>Plan</span></div>
+        ${revChart()}</div>
+      <div class="box"><h3>Needs attention</h3>
+        <ul class="attn">
+          <li><span class="dot"></span><div>${unbilled.length} completed projects not invoiced, ${k(unbilledSum)}<span class="sub">${unbilled.map(p=>esc(p.c)).join(', ')}</span></div></li>
+          <li><span class="dot"></span><div>Full-year outlook ${k(fyPlan-outlook)} below plan<span class="sub">Two December proposals worth ${k(148)} are still unsigned</span></div></li>
+          <li><span class="dot"></span><div>${k(ar['Over 90 days'])} in receivables over 90 days<span class="sub">Fawkes Strategies, invoice from July</span></div></li>
+          <li><span class="dot"></span><div>Q4 estimated tax due Dec 15, ${k(fedQ+stQ)}<span class="sub">Federal ${k(fedQ)}, state ${k(stQ)}</span></div></li>
+          <li><span class="dot lo"></span><div>${uncategorized.length} card charges need a category<span class="sub">${usd(sum(uncategorized.map(c=>c[2])))} total</span></div></li>
+          <li><span class="dot lo"></span><div>Washington sales tax booked ${usd(stDiffs[0][1]-stDiffs[0][2])} below the filed return</div></li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid g-2 mt">
+      <div class="box"><h3>Open receivables <small>${k(arTotal)} total</small></h3>${hbars(Object.entries(ar), k)}</div>
+      <div class="box"><h3>Break-even, October</h3>
+        <div class="kpi-num">${k(breakEven)}</div>
+        <div class="kpi-note" style="line-height:1.6">Monthly revenue needed to cover ${k(sga[T])} of overhead at a ${Math.round((1-COGS)*100)}% gross margin. October revenue was ${k(actual[T])}, ${k(actual[T]-breakEven)} above break-even.</div>
+        <div class="kpi-label" style="margin-top:1.2rem">Projected EBITDA, 2026</div>
+        <div class="kpi-num" style="font-size:1.8rem">${k(fyE)}</div>
+        <div class="kpi-note">Plan ${k(planE)}</div>
+      </div>
+    </div>`;
+
+  let projFilter = 'all';
+  P.projects = () => {
+    const list = projects.filter(p => projFilter==='all' || p.s===projFilter);
+    const comingRows = [9,10,11].map(m => {
+      const done = sum(projects.filter(p=>p.m===m&&p.s==='done').map(p=>p.r));
+      const up = sum(projects.filter(p=>p.m===m&&p.s!=='done').map(p=>p.r));
+      const act = m<=T ? actual[m] : done;
+      return `<tr><td>${M[m]}</td><td class="n">${act?k(act):'–'}</td><td class="n">${up?k(up):'–'}</td><td class="n">${k(act+up)}</td><td class="n">${k(plan[m])}</td><td class="n ${act+up>=plan[m]?'up':'down'}">${k(act+up-plan[m])}</td></tr>`;
+    }).join('');
+    return `
+    <div class="grid g-2">
+      <div class="box"><h3>Coming months</h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Month</th><th class="n">Completed</th><th class="n">Ongoing and upcoming</th><th class="n">Total</th><th class="n">Plan</th><th class="n">Gap</th></tr></thead>
+        <tbody>${comingRows}</tbody></table></div></div>
+      <div class="box"><h3>Completed but not billed <small>${unbilled.length} projects, ${k(unbilledSum)}</small></h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Client and project</th><th class="n">Revenue</th></tr></thead>
+        <tbody>${unbilled.map(p=>`<tr><td>${esc(p.c)}<span class="sub">${esc(p.n)}</span></td><td class="n">${k(p.r)}</td></tr>`).join('')}</tbody></table></div></div>
+    </div>
+    <div class="box mt"><h3>Projects <small>${list.length} shown</small></h3>
+      <div class="btn-row" role="group" aria-label="Filter projects by status">
+        ${['all','done','on','signed','prop'].map(s=>`<button data-filter="${s}" aria-pressed="${projFilter===s}">${s==='all'?'All':statusName[s]}</button>`).join('')}
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Client and project</th><th>Month</th><th>Status</th><th>Invoice</th><th class="n">Revenue</th></tr></thead>
+        <tbody>${list.map(p=>`<tr><td>${esc(p.c)}<span class="sub">${esc(p.n)}</span></td><td>${M[p.m]}</td><td><span class="pill ${statusCls[p.s]}">${statusName[p.s]}</span></td><td>${p.s==='done'?(p.billed?'Sent':'<span class="pill p-warn">Not billed</span>'):'–'}</td><td class="n">${k(p.r)}</td></tr>`).join('')}
+        <tr class="total"><td colspan="4">Total</td><td class="n">${k(sum(list.map(p=>p.r)))}</td></tr></tbody>
+      </table></div></div>`;
+  };
+
+  P.spend = () => `
+    <div class="grid g-2">
+      <div class="box"><h3>Card spend by type <small>October, ${usd(sum(cardTypes.map(c=>c[1])))}</small></h3>${hbars(cardTypes, usd)}</div>
+      <div class="box"><h3>Needs a category <small>${uncategorized.length} charges</small></h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Date</th><th>Merchant</th><th class="n">Amount</th></tr></thead>
+        <tbody>${uncategorized.map(c=>`<tr><td>${c[0]}</td><td>${esc(c[1])}</td><td class="n">${usd(c[2])}</td></tr>`).join('')}</tbody></table></div>
+        <p class="kpi-note" style="margin-top:0.9rem;line-height:1.6">Statement check: card charges match the October statement balance to the cent.</p>
+      </div>
+    </div>
+    <div class="grid g-2 mt">
+      <div class="box"><h3>Top merchants</h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Merchant</th><th class="n">Charges</th><th class="n">Amount</th></tr></thead>
+        <tbody>${merchants.sort((a,b)=>b[1]-a[1]).map(m=>`<tr><td>${esc(m[0])}</td><td class="n">${m[2]}</td><td class="n">${usd(m[1])}</td></tr>`).join('')}</tbody></table></div></div>
+      <div class="box"><h3>Vendor payments <small>October</small></h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Vendor</th><th>Category</th><th>Cadence</th><th class="n">Amount</th></tr></thead>
+        <tbody>${vendors.map(v=>`<tr><td>${esc(v[0])}</td><td>${esc(v[1])}</td><td>${v[3]}</td><td class="n">${usd(v[2])}</td></tr>`).join('')}</tbody></table></div></div>
+    </div>`;
+
+  P.tax = () => {
+    const qs = [['Q1','Apr 15','Paid'],['Q2','Jun 15','Paid'],['Q3','Sep 15','Paid'],['Q4','Dec 15','Due']];
+    return `
+    <div class="grid g-4">
+      <div class="box"><div class="kpi-label">Projected taxable income</div><div class="kpi-num">${k(fyE)}</div><div class="kpi-note">Based on the full-year EBITDA outlook</div></div>
+      <div class="box"><div class="kpi-label">Federal income tax</div><div class="kpi-num">${k(fedTax)}</div><div class="kpi-note">21% corporate rate</div></div>
+      <div class="box"><div class="kpi-label">State income tax</div><div class="kpi-num">${k(stTax)}</div><div class="kpi-note">7% blended rate</div></div>
+      <div class="box"><div class="kpi-label">Still to pay for 2026</div><div class="kpi-num">${k(fedQ+stQ)}</div><div class="kpi-note">Q4 estimates, due Dec 15</div></div>
+    </div>
+    <div class="grid g-2 mt">
+      <div class="box"><h3>Estimated payments</h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Quarter</th><th>Due</th><th class="n">Federal</th><th class="n">State</th><th>Status</th></tr></thead>
+        <tbody>${qs.map(q=>`<tr><td>${q[0]}</td><td>${q[1]}</td><td class="n">${k(fedQ)}</td><td class="n">${k(stQ)}</td><td><span class="pill ${q[2]==='Paid'?'p-done':'p-warn'}">${q[2]}</span></td></tr>`).join('')}</tbody></table></div></div>
+      <div class="box"><h3>Sales tax tie-out <small>October returns vs how they were booked</small></h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Jurisdiction</th><th class="n">Filed</th><th class="n">Booked</th><th class="n">Difference</th></tr></thead>
+        <tbody>${salesTax.map(r=>`<tr><td>${r[0]}</td><td class="n">${usd(r[1])}</td><td class="n">${usd(r[2])}</td><td class="n">${r[1]===r[2]?'<span class="up">Matches</span>':`<span class="pill p-warn">${usd(r[1]-r[2])}</span>`}</td></tr>`).join('')}</tbody></table></div>
+        <p class="kpi-note" style="margin-top:0.9rem;line-height:1.6">Ohio is registered with nothing due this period.</p></div>
+    </div>`;
+  };
+
+  P.recon = () => {
+    const tA = sum(clients.map(c=>c[1])), tM = sum(clients.map(c=>c[2]));
+    const inv = c => c[1] - sum(unbilled.filter(p=>p.c===c[0]).map(p=>p.r));
+    const tI = sum(clients.map(inv));
+    const sM = sum(sgaLines.map(l=>l[1])), sQ = sum(sgaLines.map(l=>l[2]));
+    return `
+    <div class="box"><h3>Revenue by client <small>Jan–Oct, tracker vs model vs invoiced in accounting</small></h3><div class="tbl-wrap"><table>
+      <thead><tr><th>Client</th><th class="n">Tracker</th><th class="n">Model</th><th class="n">Variance</th><th class="n">Invoiced</th><th class="n">Not yet invoiced</th></tr></thead>
+      <tbody>${clients.map(c=>`<tr><td>${esc(c[0])}</td><td class="n">${k(c[1])}</td><td class="n">${k(c[2])}</td><td class="n ${c[1]>=c[2]?'up':'down'}">${pct(c[1]/c[2]-1)}</td><td class="n">${k(inv(c))}</td><td class="n">${c[1]-inv(c)?`<span class="pill p-warn">${k(c[1]-inv(c))}</span>`:'–'}</td></tr>`).join('')}
+      <tr class="total"><td>Total</td><td class="n">${k(tA)}</td><td class="n">${k(tM)}</td><td class="n">${pct(tA/tM-1)}</td><td class="n">${k(tI)}</td><td class="n">${k(tA-tI)}</td></tr></tbody></table></div></div>
+    <div class="grid g-2 mt">
+      <div class="box"><h3>Overhead: model vs accounting <small>Jan–Oct</small></h3><div class="tbl-wrap"><table>
+        <thead><tr><th>Line</th><th class="n">Model</th><th class="n">Actual</th><th class="n">Variance</th></tr></thead>
+        <tbody>${sgaLines.map(l=>`<tr><td>${l[0]}</td><td class="n">${k(l[1])}</td><td class="n">${k(l[2])}</td><td class="n ${l[2]<=l[1]?'up':'down'}">${l[2]===l[1]?'–':(l[2]>l[1]?'+':'−')+k(Math.abs(l[2]-l[1]))}</td></tr>`).join('')}
+        <tr class="total"><td>Total</td><td class="n">${k(sM)}</td><td class="n">${k(sQ)}</td><td class="n">${sQ<=sM?'−':'+'}${k(Math.abs(sQ-sM))}</td></tr></tbody></table></div></div>
+      <div class="box chart"><h3>Cash position vs projection</h3>
+        <div class="legend"><span><i class="line" style="background:#BB7125"></i>Actual</span><span><i class="line" style="background:#1B3A6B"></i>Projected</span></div>
+        ${cashChart()}
+        <p class="kpi-note" style="margin-top:0.6rem;line-height:1.6">October cash is ${k(Math.abs(cashGap))} below projection. Receivables grew ${k(arTotal-arJune)} since June, more than the whole gap.</p></div>
+    </div>`;
+  };
+
+  const QA = [
+    ['Why is cash below projection in October?',
+     `October cash is ${k(cashActual[T])} against a projection of ${k(cashPlan[T])}, a gap of ${k(Math.abs(cashGap))}.\n\nThe business isn’t underperforming: revenue through October is ${pct(ytdA/ytdP-1)} vs plan. The gap is timing. Open receivables are ${k(arTotal)}, up ${k(arTotal-arJune)} since June, so earned revenue is sitting with clients instead of in the bank. Collecting the ${k(ar['Over 90 days'])} over 90 days from Fawkes Strategies would close more than half of it.`],
+    ['What do we need to invoice this week?',
+     `${unbilled.length} projects are complete but not invoiced, ${k(unbilledSum)} in total:\n\n${unbilled.map(p=>`• ${p.c}, ${p.n}: ${k(p.r)}`).join('\n')}\n\nAll three finished in October.`],
+    ['Are we on track for the year?',
+     `Year to date, yes: ${k(ytdA)} in revenue against a plan of ${k(ytdP)} (${pct(ytdA/ytdP-1)}).\n\nFor the full year, completed plus booked work comes to ${k(outlook)}, ${k(fyPlan-outlook)} short of the ${k(fyPlan)} plan. December has ${k(148)} in proposals that aren’t signed yet; signing both would bring the outlook within ${k(fyPlan-outlook-148)} of plan.`],
+    ['How much tax do we still owe for 2026?',
+     `Based on projected taxable income of ${k(fyE)}, the year’s income tax comes to about ${k(fedTax+stTax)}: ${k(fedTax)} federal and ${k(stTax)} state.\n\nThree quarterly estimates are paid. The Q4 payments of ${k(fedQ)} federal and ${k(stQ)} state are due December 15. Separately, Washington sales tax for October was booked ${usd(stDiffs[0][1]-stDiffs[0][2])} below the filed return and needs a correcting entry.`],
+  ];
+  let asked = -1;
+  P.ask = () => `
+    <div class="ask-grid">
+      <div>
+        <p class="ask-intro">In the live dashboard, Claude answers questions by looking things up in the dashboard’s own data: projects, revenue, overhead, card spend, cash and taxes. In this demo the answers are pre-written. Pick a question.</p>
+        ${QA.map((q,i)=>`<button class="ask-q" data-q="${i}" aria-pressed="${asked===i}">${q[0]}</button>`).join('')}
+      </div>
+      <div class="chat" aria-live="polite">
+        ${asked<0 ? '<p class="chat-empty">Choose a question to see how the assistant answers.</p>'
+          : `<div class="msg user">${esc(QA[asked][0])}</div><div class="msg bot">${esc(QA[asked][1])}</div>`}
+      </div>
+    </div>`;
+
+  /* ── Rendering and tabs ── */
+  const keys = ['overview','projects','spend','tax','recon','ask'];
+  const render = key => { document.getElementById('p-'+key).innerHTML = P[key](); };
+  keys.forEach(render);
+
+  const tabs = [...document.querySelectorAll('.tab')];
+  function select(i, focus) {
+    tabs.forEach((t, j) => {
+      const on = i === j;
+      t.setAttribute('aria-selected', on);
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(i));
+    t.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') select((i+1) % tabs.length, true);
+      if (e.key === 'ArrowLeft') select((i-1+tabs.length) % tabs.length, true);
+      if (e.key === 'Home') select(0, true);
+      if (e.key === 'End') select(tabs.length-1, true);
+    });
+  });
+
+  document.getElementById('p-projects').addEventListener('click', e => {
+    const b = e.target.closest('[data-filter]'); if (!b) return;
+    projFilter = b.dataset.filter; render('projects');
+    document.querySelector(`#p-projects [data-filter="${projFilter}"]`).focus();
+  });
+  document.getElementById('p-ask').addEventListener('click', e => {
+    const b = e.target.closest('[data-q]'); if (!b) return;
+    asked = +b.dataset.q; render('ask');
+    document.querySelector(`#p-ask [data-q="${asked}"]`).focus();
+  });
+})();
+</script>
+</body>
+</html>
