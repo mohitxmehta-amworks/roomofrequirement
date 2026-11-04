@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" role="img" aria-label="">
+  <!-- Original composition for Room of Requirement. Palette after Wada Sanzo combination #182
+       (Raw Sienna, Vandyke Brown, Deep Indigo), with Dark Tyrian Blue and Ivory Buff. -->
+  <defs>
+    <clipPath id="arch">
+      <path d="M40 520 V200 A160 160 0 0 1 360 200 V520 Z"/>
+    </clipPath>
+    <pattern id="ledger" width="400" height="14" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="13.5" x2="400" y2="13.5" stroke="#EBD3A2" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- outer frame -->
+  <path d="M28 520 V200 A172 172 0 0 1 372 200 V520" fill="none" stroke="#EBD3A2" stroke-opacity="0.22" stroke-width="1"/>
+
+  <g clip-path="url(#arch)">
+    <!-- sky -->
+    <rect x="0" y="0" width="400" height="520" fill="#12354E"/>
+    <rect x="0" y="0" width="400" height="520" fill="url(#ledger)"/>
+
+    <!-- sun -->
+    <circle cx="200" cy="250" r="92" fill="#BB7125"/>
+    <circle cx="200" cy="250" r="92" fill="none" stroke="#EBD3A2" stroke-opacity="0.35" stroke-width="1"/>
+
+    <!-- layered bands, back to front -->
+    <path d="M0 300 C70 276 130 288 200 300 S330 322 400 296 V520 H0 Z" fill="#132540"/>
+    <path d="M0 300 C70 276 130 288 200 300 S330 322 400 296" fill="none" stroke="#EBD3A2" stroke-opacity="0.3" stroke-width="1"/>
+
+    <path d="M0 352 C90 330 150 360 230 350 S350 330 400 344 V520 H0 Z" fill="#4B3317"/>
+    <path d="M0 352 C90 330 150 360 230 350 S350 330 400 344" fill="none" stroke="#BB7125" stroke-opacity="0.6" stroke-width="1"/>
+
+    <path d="M0 400 C80 386 160 410 240 398 S360 380 400 392 V520 H0 Z" fill="#0B1929"/>
+    <path d="M0 400 C80 386 160 410 240 398 S360 380 400 392" fill="none" stroke="#EBD3A2" stroke-opacity="0.25" stroke-width="1"/>
+
+    <path d="M0 452 C100 440 170 462 260 450 S370 438 400 446 V520 H0 Z" fill="#051230"/>
+    <path d="M0 452 C100 440 170 462 260 450 S370 438 400 446" fill="none" stroke="#BB7125" stroke-opacity="0.45" stroke-width="1"/>
+  </g>
+
+  <!-- inner arch edge -->
+  <path d="M40 520 V200 A160 160 0 0 1 360 200 V520" fill="none" stroke="#EBD3A2" stroke-opacity="0.45" stroke-width="1"/>
+</svg>
