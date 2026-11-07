@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Mohit’s Formal Closet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Figtree:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+/* Layout: garments hang edge-on along a thin wooden rail on an off-white wall, and the one in the middle swings out to face you. */
+:root {
+  color-scheme: light;
+  --wall: #F8F7F3;
+  --inside: #F3F1EB;
+  --inside-deep: #E6E2D9;
+  --ink: #23252A;
+  --muted: #6E6C66;
+  --line: #E1DED6;
+  --brass: #A47E3B;
+  --brass-hi: #E9D3A0;
+  --brass-lo: #6E5222;
+  --wood: #7B5234;
+  --wood-hi: #B07F55;
+  --rail: #8C5D39;
+  --rail-hi: #C89A6C;
+  --rail-lo: #5B391F;
+  --panel: #9A6A44;
+  --panel-hi: #C3946A;
+  --panel-lo: #6A4428;
+  --cast: rgba(70, 50, 30, 0.24);
+  --sheet: rgba(248, 247, 243, 0.97);
+  --button: #23252A;
+  --button-ink: #F8F7F3;
+
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --body: "Figtree", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --hang: 1.4;
+  --w: max(180px, min(58vw, 330px, calc((100svh - 300px) / var(--hang))));
+  --pad-top: 46px;
+}
+
+* { box-sizing: border-box; }
+html, body { overscroll-behavior-x: none; }
+body {
+  margin: 0;
+  background: var(--wall);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+.wrap {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 1200px;
+  margin-inline: auto;
+}
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+header.wrap {
+  padding-block: 24px 14px;
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 32px;
+}
+h1 {
+  margin: 0;
+  font-family: var(--display); font-style: italic; font-weight: 400;
+  font-size: clamp(32px, 5.6vw, 50px); line-height: 1; letter-spacing: -0.01em;
+}
+.hint { margin: 0; color: var(--muted); max-width: 36ch; }
+.hint .mono { display: block; color: var(--ink); margin-bottom: 4px; }
+
+/* Open rail: no cabinet, the clothes hang straight off a thin wooden rail on the wall */
+.closet { position: relative; }
+.interior {
+  position: relative; overflow: hidden;
+  height: calc(var(--pad-top) + var(--w) * var(--hang) + 34px);
+  perspective: 1500px;
+  perspective-origin: 50% 30%;
+  cursor: grab;
+  touch-action: pan-y;
+  outline: none;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+.interior.dragging { cursor: grabbing; }
+.interior:focus-visible { outline: 2px solid var(--brass); outline-offset: -2px; }
+.rail {
+  position: absolute; left: 0; right: 0; z-index: 0;
+  top: calc(var(--pad-top) + var(--w) * 0.04 - 1.5px);
+  height: 3px; border-radius: 2px;
+  background: linear-gradient(to bottom, var(--rail-hi), var(--rail) 50%, var(--rail-lo));
+  box-shadow: 0 3px 4px -1px var(--cast);
+}
+.item {
+  position: absolute; left: 50%; top: var(--pad-top);
+  width: var(--w); margin-left: calc(var(--w) / -2);
+  height: calc(var(--w) * var(--hang));
+  transform-origin: 50% calc(var(--w) * 0.04);
+  container-type: inline-size;
+  will-change: transform;
+  backface-visibility: visible;
+}
+.item svg { position: absolute; left: 0; top: 0; width: 100cqw; height: 40cqw; overflow: visible; }
+.piece {
+  position: absolute; top: 17cqw; width: 86cqw;
+  padding: 0; border: 0; background: none; cursor: pointer;
+  filter: drop-shadow(8px 14px 12px var(--cast));
+}
+.piece img { display: block; width: 100%; height: auto; pointer-events: none; -webkit-user-drag: none; }
+.piece .shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(40, 26, 14, 0.55), rgba(40, 26, 14, 0.15));
+  opacity: 0;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+}
+.piece:focus-visible { outline: 2px solid var(--brass); outline-offset: 6px; }
+
+/* Caption under the closet */
+.nameplate.wrap {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px;
+  padding-block: 30px 10px;
+}
+.nameplate .mono { color: var(--muted); }
+.nameplate .name {
+  font-family: var(--display); font-size: clamp(22px, 3.2vw, 30px); line-height: 1.15; margin: 2px 0 0;
+  text-wrap: balance;
+}
+.nameplate .open {
+  background: none; border: 0; padding: 0; margin-top: 6px;
+  color: var(--ink); font: 500 14px var(--body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.arrows { display: flex; gap: 8px; }
+.arrows button {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--line); background: transparent; color: var(--ink);
+  font-size: 18px; cursor: pointer;
+}
+.arrows button:hover { border-color: var(--ink); }
+.arrows button:focus-visible, .nameplate .open:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.arrows button:disabled { opacity: 0.35; cursor: default; }
+footer.wrap { padding-block: 4px 32px; }
+footer p { margin: 0; color: var(--muted); font-size: 13px; }
+footer p:empty { display: none; }
+
+/* Type tabs */
+.types.wrap { display: flex; gap: 8px; overflow-x: auto; padding-block: 0 6px; scrollbar-width: none; }
+.types.wrap::-webkit-scrollbar { display: none; }
+.types button {
+  flex: 0 0 auto; display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line);
+  background: transparent; color: var(--muted); font: 500 13px var(--body); cursor: pointer; white-space: nowrap;
+}
+.types button .n { font-family: var(--mono); font-size: 11px; opacity: 0.7; }
+.types button:hover { color: var(--ink); border-color: var(--ink); }
+.types button[aria-pressed="true"] { background: var(--button); color: var(--button-ink); border-color: var(--button); }
+.types button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+
+/* Detail sheet */
+.sheet {
+  position: fixed; inset: 0; z-index: 20;
+  background: var(--sheet); overflow-y: auto;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.sheet-inner {
+  display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 40px; align-items: center; min-height: 100%;
+  padding-block: 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  max-width: 1100px; margin-inline: auto;
+}
+.zoom { position: relative; overflow: hidden; border-radius: 6px; max-width: 100%; justify-self: center; cursor: zoom-in; touch-action: pan-y; }
+.zoom img { display: block; max-height: 82vh; width: auto; max-width: 100%; transition: transform 0.25s ease; user-select: none; -webkit-user-drag: none; }
+.zoom.on { cursor: zoom-out; touch-action: none; }
+.zoom.on img { transform: scale(2.6); }
+.sheet-text { min-width: 0; }
+.sheet-text h2 {
+  font-family: var(--display); font-weight: 400; font-style: italic;
+  font-size: clamp(30px, 4.4vw, 44px); line-height: 1.05; margin: 6px 0 14px; text-wrap: balance;
+}
+.sheet-text p { margin: 0 0 18px; max-width: 46ch; }
+.sheet-text .eyebrow { color: var(--muted); margin: 0; }
+dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 20px; margin: 0 0 22px; border-top: 1px solid var(--line); padding-top: 16px; }
+dt { color: var(--muted); }
+dd { margin: 0; }
+.zoom-hint { color: var(--muted); font-size: 13px; }
+.close {
+  margin-top: 6px; padding: 12px 20px; border-radius: 999px; border: 0;
+  background: var(--button); color: var(--button-ink);
+  font: 500 14px var(--body); cursor: pointer;
+}
+.close:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+@media (max-width: 720px) {
+  .sheet-inner { grid-template-columns: minmax(0, 1fr); gap: 20px; align-items: start; }
+  .zoom img { max-height: 62vh; }
+}
+@media (prefers-reduced-motion: reduce) { .zoom img { transition: none; } }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:var(--wood-hi)"/>
+      <stop offset="1" style="stop-color:var(--wood)"/>
+    </linearGradient>
+    <linearGradient id="brassg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" style="stop-color:var(--brass-lo)"/>
+      <stop offset="0.5" style="stop-color:var(--brass-hi)"/>
+      <stop offset="1" style="stop-color:var(--brass)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<header class="wrap">
+  <h1>Mohit’s Formal Closet</h1>
+  <p class="hint"><span class="mono">Scroll, drag or swipe</span>The piece in the middle swings out to face you. Tap it to look closer.</p>
+</header>
+
+<nav class="types wrap" id="types" aria-label="Jump to a type"></nav>
+
+<div class="wrap">
+  <div class="closet">
+    <div class="interior" id="interior" tabindex="0" role="listbox" aria-label="Closet. Use the left and right arrow keys to move along the rail.">
+      <div class="rail" aria-hidden="true"></div>
+    </div>
+  </div>
+</div>
+
+<div class="nameplate wrap">
+  <div aria-live="polite">
+    <div class="mono" id="np-no"></div>
+    <div class="name" id="np-name"></div>
+    <button type="button" class="open" id="np-open">See details</button>
+  </div>
+  <div class="arrows">
+    <button type="button" id="prev" aria-label="Previous piece">&larr;</button>
+    <button type="button" id="next" aria-label="Next piece">&rarr;</button>
+  </div>
+</div>
+
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheet-inner">
+    <div class="zoom" id="zoom"><img id="zoom-img" alt="" draggable="false"></div>
+    <div class="sheet-text">
+      <p class="eyebrow mono" id="sheet-no"></p>
+      <h2 id="sheet-title"></h2>
+      <p id="sheet-desc"></p>
+      <dl id="sheet-dl"></dl>
+      <p class="zoom-hint">Hover over the photo, or tap it, to see the detail up close.</p>
+      <button type="button" class="close" id="close">Back to the closet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Folder that holds the outfit images, relative to this page. Change it if you move them. */
+const ASSET_BASE = "assets/";
+
+/* One entry per outfit, in rail order. To add an outfit: drop a transparent PNG/WebP into the
+   folder above and add an entry here. ratio = image height / width; collar = horizontal centre
+   of the collar as a fraction of the width (0.5 for centred product shots). */
+const PIECES = [
+ {
+  "name": "Blush embroidered Nehru vest",
+  "ratio": 1.5125,
+  "collar": 0.499,
+  "hanger": 22,
+  "desc": "A sleeveless Nehru vest in ivory, covered in a pink floral lattice embroidery.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Covered buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, two welt pockets"
+   ],
+   [
+    "Colour",
+    "Ivory and blush"
+   ]
+  ],
+  "type": "Nehru jackets",
+  "file": "blush-embroidered-nehru-vest.webp"
+ },
+ {
+  "name": "Navy Nehru jacket",
+  "ratio": 1.4694,
+  "collar": 0.499,
+  "hanger": 22,
+  "desc": "A mandarin-collar jacket in deep navy. Small gold leaf sprigs are scattered across the front, and two cranes sit in a spray of coral, lilac and blue leaves at the right hem.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Six pearl buttons"
+   ],
+   [
+    "Embroidery",
+    "Gold leaf sprigs; crane and floral panel at the hem"
+   ],
+   [
+    "Colour",
+    "Midnight navy"
+   ]
+  ],
+  "type": "Nehru jackets",
+  "file": "navy-nehru-jacket.webp"
+ },
+ {
+  "name": "Pale grey bandhgala",
+  "ratio": 1.2736,
+  "collar": 0.501,
+  "hanger": 14,
+  "desc": "A bandhgala in pale grey with engraved silver buttons.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Six silver buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, flap pockets"
+   ],
+   [
+    "Colour",
+    "Pale grey"
+   ]
+  ],
+  "type": "Bandhgalas",
+  "file": "pale-grey-bandhgala.webp"
+ },
+ {
+  "name": "Denim-blue bandhgala",
+  "ratio": 1.2542,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A bandhgala in a soft denim blue with a clean mandarin collar.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Six dark buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, flap pockets"
+   ],
+   [
+    "Colour",
+    "Denim blue"
+   ]
+  ],
+  "type": "Bandhgalas",
+  "file": "denim-blue-bandhgala.webp"
+ },
+ {
+  "name": "Chocolate bandhgala",
+  "ratio": 1.2389,
+  "collar": 0.5,
+  "hanger": 14,
+  "desc": "A bandhgala in deep chocolate brown with a high mandarin collar.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Five dark buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, flap pockets"
+   ],
+   [
+    "Colour",
+    "Chocolate brown"
+   ]
+  ],
+  "type": "Bandhgalas",
+  "file": "chocolate-bandhgala.webp"
+ },
+ {
+  "name": "Powder-blue bandhgala",
+  "ratio": 1.2722,
+  "collar": 0.501,
+  "hanger": 14,
+  "desc": "A powder-blue bandhgala with raglan seams and an asymmetric front, over a cream shirt.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Asymmetric"
+   ],
+   [
+    "Pockets",
+    "Three flap pockets with pink buttons"
+   ],
+   [
+    "Colour",
+    "Powder blue"
+   ]
+  ],
+  "type": "Bandhgalas",
+  "file": "powder-blue-bandhgala.webp"
+ },
+ {
+  "name": "Rust asymmetric bandhgala",
+  "ratio": 1.5847,
+  "collar": 0.497,
+  "hanger": 14,
+  "desc": "A rust-red bandhgala with a cross-over front and a sharply angled flap, over a matching kurta.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Asymmetric, two buttons"
+   ],
+   [
+    "Detail",
+    "Angled cross-over flap"
+   ],
+   [
+    "Colour",
+    "Rust red"
+   ]
+  ],
+  "type": "Bandhgalas",
+  "file": "rust-asymmetric-bandhgala.webp"
+ },
+ {
+  "name": "Ivory folk-embroidered jacket",
+  "ratio": 1.3222,
+  "collar": 0.501,
+  "hanger": 14,
+  "desc": "An ivory jacket covered in colourful folk motifs: elephants, horses, birds and mirror work, worn over a matching kurta.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Embroidery",
+    "Multicolour folk motifs with mirror work"
+   ],
+   [
+    "Colour",
+    "Ivory"
+   ]
+  ],
+  "type": "Jackets",
+  "file": "ivory-folk-embroidered-jacket.webp"
+ },
+ {
+  "name": "Sky-blue embroidered jacket",
+  "ratio": 1.2139,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A sky-blue jacket with a round neck, heavily worked with floral embroidery, beads and sequins.",
+  "details": [
+   [
+    "Neck",
+    "Round"
+   ],
+   [
+    "Embroidery",
+    "Florals with beads and sequins"
+   ],
+   [
+    "Colour",
+    "Sky blue"
+   ]
+  ],
+  "type": "Jackets",
+  "file": "sky-blue-embroidered-jacket.webp"
+ },
+ {
+  "name": "Beige safari jacket",
+  "ratio": 1.2236,
+  "collar": 0.498,
+  "hanger": 14,
+  "desc": "A safari-style jacket in textured beige with epaulettes and a printed lining.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Shoulders",
+    "Buttoned epaulettes"
+   ],
+   [
+    "Pockets",
+    "Four patch pockets with button flaps"
+   ],
+   [
+    "Colour",
+    "Beige"
+   ]
+  ],
+  "type": "Jackets",
+  "file": "beige-safari-jacket.webp"
+ },
+ {
+  "name": "Black double-breasted jacket",
+  "ratio": 1.2944,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A double-breasted jacket in a textured black weave with satin peak lapels.",
+  "details": [
+   [
+    "Lapels",
+    "Satin peak"
+   ],
+   [
+    "Fastening",
+    "Double-breasted, six buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, jetted pockets"
+   ],
+   [
+    "Colour",
+    "Black"
+   ]
+  ],
+  "type": "Blazers & tuxedos",
+  "file": "black-double-breasted-jacket.webp"
+ },
+ {
+  "name": "Midnight navy blazer",
+  "ratio": 1.2472,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A single-breasted blazer in a textured midnight navy.",
+  "details": [
+   [
+    "Lapels",
+    "Notch"
+   ],
+   [
+    "Fastening",
+    "Single button"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, flap pockets"
+   ],
+   [
+    "Colour",
+    "Midnight navy"
+   ]
+  ],
+  "type": "Blazers & tuxedos",
+  "file": "midnight-navy-blazer.webp"
+ },
+ {
+  "name": "Teal blazer",
+  "ratio": 1.3139,
+  "collar": 0.5,
+  "hanger": 14,
+  "desc": "A single-breasted blazer in deep teal, shown over a cream band-collar shirt.",
+  "details": [
+   [
+    "Lapels",
+    "Notch"
+   ],
+   [
+    "Fastening",
+    "Two buttons"
+   ],
+   [
+    "Pockets",
+    "Welt chest pocket, flap pockets"
+   ],
+   [
+    "Colour",
+    "Teal"
+   ]
+  ],
+  "type": "Blazers & tuxedos",
+  "file": "teal-blazer.webp"
+ },
+ {
+  "name": "Navy shawl-collar tuxedo",
+  "ratio": 1.2514,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A navy tuxedo jacket with pleated shawl lapels, worn with a navy bow tie.",
+  "details": [
+   [
+    "Lapels",
+    "Pleated shawl collar"
+   ],
+   [
+    "Pockets",
+    "Jetted pockets"
+   ],
+   [
+    "Worn with",
+    "Navy bow tie"
+   ],
+   [
+    "Colour",
+    "Navy"
+   ]
+  ],
+  "type": "Blazers & tuxedos",
+  "file": "navy-shawl-collar-tuxedo.webp"
+ },
+ {
+  "name": "Navy embroidered double-breasted blazer",
+  "ratio": 1.5083,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A double-breasted navy blazer covered in a white geometric dot pattern, worn over a matching navy kurta.",
+  "details": [
+   [
+    "Lapels",
+    "Peak"
+   ],
+   [
+    "Fastening",
+    "Double-breasted"
+   ],
+   [
+    "Pattern",
+    "All-over geometric embroidery"
+   ],
+   [
+    "Colour",
+    "Navy and white"
+   ]
+  ],
+  "type": "Blazers & tuxedos",
+  "file": "navy-embroidered-double-breasted-blazer.webp"
+ },
+ {
+  "name": "Mustard striped kurta",
+  "ratio": 1.4583,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A mustard kurta with fine dark stripes running down an overlapping front panel.",
+  "details": [
+   [
+    "Neck",
+    "Round band"
+   ],
+   [
+    "Detail",
+    "Vertical stripes"
+   ],
+   [
+    "Colour",
+    "Mustard"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "mustard-striped-kurta.webp"
+ },
+ {
+  "name": "Peach kurta",
+  "ratio": 1.3264,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A peach kurta with a band collar and a curved, piped overlap across the front.",
+  "details": [
+   [
+    "Collar",
+    "Band"
+   ],
+   [
+    "Fastening",
+    "Side button"
+   ],
+   [
+    "Detail",
+    "Curved piped overlap"
+   ],
+   [
+    "Colour",
+    "Peach"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "peach-kurta.webp"
+ },
+ {
+  "name": "Beige patterned kurta",
+  "ratio": 1.5111,
+  "collar": 0.501,
+  "hanger": 14,
+  "desc": "A beige kurta with a fine thread pattern and a short button placket.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Button placket"
+   ],
+   [
+    "Colour",
+    "Beige"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "beige-patterned-kurta.webp"
+ },
+ {
+  "name": "White embroidered kurta",
+  "ratio": 1.6028,
+  "collar": 0.498,
+  "hanger": 14,
+  "desc": "A white kurta with tonal leaf embroidery and a blue embroidered collar and placket.",
+  "details": [
+   [
+    "Collar",
+    "Embroidered band"
+   ],
+   [
+    "Embroidery",
+    "Tonal leaves; blue trim"
+   ],
+   [
+    "Colour",
+    "White"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "white-embroidered-kurta.webp"
+ },
+ {
+  "name": "Sage angrakha kurta",
+  "ratio": 1.525,
+  "collar": 0.502,
+  "hanger": 14,
+  "desc": "A pale sage kurta with an overlapping angrakha-style placket and small pink embroidered motifs.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Side-closing placket"
+   ],
+   [
+    "Embroidery",
+    "Small scattered motifs"
+   ],
+   [
+    "Colour",
+    "Pale sage"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "sage-angrakha-kurta.webp"
+ },
+ {
+  "name": "Ivory embroidered kurta",
+  "ratio": 1.6069,
+  "collar": 0.506,
+  "hanger": 14,
+  "desc": "An ivory kurta with an all-over tonal motif pattern and a blue embroidered collar and placket.",
+  "details": [
+   [
+    "Collar",
+    "Embroidered band"
+   ],
+   [
+    "Embroidery",
+    "Tonal motifs; blue trim"
+   ],
+   [
+    "Colour",
+    "Ivory"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "ivory-embroidered-kurta.webp"
+ },
+ {
+  "name": "Yellow buti kurta",
+  "ratio": 1.5639,
+  "collar": 0.5,
+  "hanger": 14,
+  "desc": "A marigold-yellow kurta with small white buti motifs and an embroidered neckline and cuffs.",
+  "details": [
+   [
+    "Neck",
+    "Split band collar"
+   ],
+   [
+    "Pattern",
+    "White buti motifs"
+   ],
+   [
+    "Trim",
+    "Embroidered neckline and cuffs"
+   ],
+   [
+    "Colour",
+    "Marigold yellow"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "yellow-buti-kurta.webp"
+ },
+ {
+  "name": "Stone wrap kurta",
+  "ratio": 1.4667,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A stone-coloured kurta with a diagonal wrap panel edged in grey stripe bands.",
+  "details": [
+   [
+    "Neck",
+    "Round band"
+   ],
+   [
+    "Detail",
+    "Diagonal wrap panel with stripe bands"
+   ],
+   [
+    "Colour",
+    "Stone"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "stone-wrap-kurta.webp"
+ },
+ {
+  "name": "Floral print kurta",
+  "ratio": 1.4458,
+  "collar": 0.499,
+  "hanger": 14,
+  "desc": "A kurta in a butter-yellow ground with large coral, pink and lilac florals.",
+  "details": [
+   [
+    "Collar",
+    "Mandarin"
+   ],
+   [
+    "Fastening",
+    "Button placket"
+   ],
+   [
+    "Print",
+    "Large florals"
+   ],
+   [
+    "Colour",
+    "Yellow, coral and pink"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "floral-print-kurta.webp"
+ },
+ {
+  "name": "Pink paisley kurta",
+  "ratio": 1.5333,
+  "collar": 0.502,
+  "hanger": 14,
+  "desc": "A pink kurta in a tonal paisley print with a gold band collar and placket.",
+  "details": [
+   [
+    "Collar",
+    "Gold band"
+   ],
+   [
+    "Fastening",
+    "Small buttons on a gold placket"
+   ],
+   [
+    "Print",
+    "Tonal paisley"
+   ],
+   [
+    "Colour",
+    "Pink and gold"
+   ]
+  ],
+  "type": "Kurtas",
+  "file": "pink-paisley-kurta.webp"
+ }
+];
+PIECES.forEach(p => { p.img = encodeURI(ASSET_BASE + p.file); });
+
+const SVGNS = "http://www.w3.org/2000/svg";
+function hangerSVG(hw) {
+  const L = 50 - hw, R = 50 + hw;
+  const svg = document.createElementNS(SVGNS, "svg");
+  svg.setAttribute("viewBox", "0 0 100 40");
+  svg.setAttribute("aria-hidden", "true");
+  svg.innerHTML =
+    `<path d="M47.3 5.3 A2.7 2.7 0 1 1 52.7 4 L52.7 6.2 Q52.7 9.4 50 10.4 L50 19.2" fill="none" stroke="url(#brassg)" stroke-width="0.9" stroke-linecap="round"/>` +
+    `<rect x="48.8" y="18.4" width="2.4" height="1.9" rx="0.4" style="fill:var(--brass)"/>` +
+    `<path d="M${L} 31 Q${50 - hw * 0.5} 22.4 47.2 19.8 L52.8 19.8 Q${50 + hw * 0.5} 22.4 ${R} 31 Q${R + 1.1} 32.5 ${R - 0.7} 33.5 Q50 27.2 ${L + 0.7} 33.5 Q${L - 1.1} 32.5 ${L} 31 Z" fill="url(#wood)"/>`;
+  return svg;
+}
+
+const interior = document.getElementById("interior");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const tallest = Math.max(1, ...PIECES.map(p => 0.17 + 0.86 * (p.ratio || 1.4) + 0.03));
+document.documentElement.style.setProperty("--hang", tallest.toFixed(3));
+
+const TYPES = [];
+PIECES.forEach(p => { const t = p.type || "Pieces"; if (!TYPES.includes(t)) TYPES.push(t); });
+const groupOf = PIECES.map(p => TYPES.indexOf(p.type || "Pieces"));
+const typesNav = document.getElementById("types");
+const typeBtns = TYPES.map((t, g) => {
+  const b = document.createElement("button");
+  b.type = "button";
+  const count = groupOf.filter(x => x === g).length;
+  b.innerHTML = `<span></span><span class="n">${count}</span>`;
+  b.firstChild.textContent = t;
+  b.addEventListener("click", () => goTo(groupOf.indexOf(g)));
+  typesNav.appendChild(b);
+  return b;
+});
+if (TYPES.length < 2) typesNav.hidden = true;
+
+const items = PIECES.map((p, i) => {
+  const no = "No. " + String(i + 1).padStart(2, "0");
+  const el = document.createElement("div");
+  el.className = "item";
+  el.setAttribute("role", "option");
+  el.appendChild(hangerSVG(p.hanger || 14));
+  const btn = document.createElement("button");
+  btn.type = "button"; btn.className = "piece"; btn.tabIndex = -1;
+  btn.style.left = (50 - (p.collar ?? 0.5) * 86).toFixed(2) + "cqw";
+  btn.setAttribute("aria-label", p.name);
+  const img = document.createElement("img");
+  img.src = p.img; img.alt = p.name; img.draggable = false;
+  const shade = document.createElement("span");
+  shade.className = "shade";
+  shade.style.webkitMaskImage = shade.style.maskImage = `url("${p.img}")`;
+  btn.append(img, shade);
+  el.appendChild(btn);
+  interior.appendChild(el);
+  btn.addEventListener("click", () => {
+    if (performance.now() - lastDragEnd < 120) return;
+    if (i === Math.round(pos)) openSheet(i); else goTo(i);
+  });
+  return { el, shade, p, no, sway: 0, sw: 0 };
+});
+
+/* Motion: pos is a continuous index; the item nearest pos faces forward. */
+let pos = 0, target = 0, vel = 0, lastT = performance.now(), running = false;
+function layout() {
+  const W = items[0]?.el.offsetWidth || 300;
+  const G1 = W * 0.68;      // distance from the front-facing piece to its neighbours
+  const G2 = W * 0.16;      // spacing of the pieces hanging edge-on
+  const POP = W * 0.42;
+  const G3 = W * 0.22;      // extra space between types
+  const gi = Math.floor(clamp(pos, 0, items.length - 1)), gf = clamp(pos, 0, items.length - 1) - gi;
+  const gPos = groupOf[gi] + ((groupOf[Math.min(gi + 1, items.length - 1)] - groupOf[gi]) * gf);
+  items.forEach((it, i) => {
+    const d = i - pos, ad = Math.abs(d), s = Math.sign(d) || 1;
+    const t = Math.min(ad, 1), e = t * t * (3 - 2 * t);
+    const x = (ad < 1 ? d * G1 : s * (G1 + (ad - 1) * G2)) + (groupOf[i] - gPos) * G3;
+    const rot = s * e * 66;
+    const z = (1 - e) * POP - e * W * 0.15;
+    it.el.style.transform = `translate3d(${x.toFixed(1)}px, 0, ${z.toFixed(1)}px) rotateY(${rot.toFixed(2)}deg) rotateZ(${it.sway.toFixed(2)}deg)`;
+    it.el.style.zIndex = String(1000 - Math.round(ad * 10));
+    it.shade.style.opacity = (e * 0.85).toFixed(3);
+    it.shade.style.background = d < 0
+      ? "linear-gradient(90deg, rgba(40,26,14,.15), rgba(40,26,14,.6))"
+      : "linear-gradient(90deg, rgba(40,26,14,.6), rgba(40,26,14,.15))";
+    it.el.setAttribute("aria-selected", String(i === Math.round(pos)));
+  });
+}
+function kick() { if (!running) { running = true; lastT = performance.now(); requestAnimationFrame(tick); } }
+function tick(now) {
+  const dt = clamp((now - lastT) / 1000, 0.001, 0.04); lastT = now;
+  const prev = pos;
+  if (reduce || dragging) pos = reduce ? target : pos;
+  else pos += (target - pos) * (1 - Math.exp(-dt * 9));
+  vel += ((pos - prev) / dt - vel) * 0.3;
+  let active = Math.abs(target - pos) > 0.001 || dragging;
+  if (!reduce) {
+    for (const it of items) {
+      const tgt = clamp(-vel * 3.2, -8, 8);
+      it.sw += (-48 * (it.sway - tgt) - 2.2 * it.sw) * dt;
+      it.sway += it.sw * dt;
+      if (Math.abs(it.sway) > 0.02 || Math.abs(it.sw) > 0.05) active = true;
+    }
+  }
+  if (!active) { pos = target; vel = 0; }
+  layout(); updatePlate();
+  if (active) requestAnimationFrame(tick); else running = false;
+}
+function goTo(i) { target = clamp(Math.round(i), 0, items.length - 1); kick(); }
+
+/* Wheel and trackpad */
+let wheelTimer;
+interior.addEventListener("wheel", e => {
+  const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  const next = clamp(target + delta / 160, 0, items.length - 1);
+  if (next === target && ((delta < 0 && target <= 0) || (delta > 0 && target >= items.length - 1))) return;
+  e.preventDefault();
+  target = next; kick();
+  clearTimeout(wheelTimer);
+  wheelTimer = setTimeout(() => goTo(target), 140);
+}, { passive: false });
+
+/* Drag and swipe */
+let dragging = false, dragStart = null, lastDragEnd = 0;
+interior.addEventListener("pointerdown", e => {
+  if (e.button !== 0) return;
+  dragStart = { x: e.clientX, y: e.clientY, pos, moved: false, id: e.pointerId };
+});
+window.addEventListener("pointermove", e => {
+  if (!dragStart || e.pointerId !== dragStart.id) return;
+  const dx = e.clientX - dragStart.x, dy = e.clientY - dragStart.y;
+  if (!dragStart.moved) {
+    if (Math.abs(dx) < 6 || Math.abs(dx) < Math.abs(dy)) return;
+    dragStart.moved = true; dragging = true; interior.classList.add("dragging");
+  }
+  const W = items[0].el.offsetWidth;
+  pos = target = clamp(dragStart.pos - dx / (W * 0.45), -0.3, items.length - 0.7);
+  kick();
+});
+window.addEventListener("pointerup", () => {
+  if (!dragStart) return;
+  if (dragStart.moved) { lastDragEnd = performance.now(); dragging = false; interior.classList.remove("dragging"); goTo(target - Math.sign(vel) * Math.min(1.2, Math.abs(vel) * 0.12)); }
+  dragStart = null;
+});
+window.addEventListener("pointercancel", () => { dragStart = null; dragging = false; interior.classList.remove("dragging"); goTo(target); });
+
+/* Keyboard and buttons */
+interior.addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") { e.preventDefault(); goTo(target + 1); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); goTo(target - 1); }
+  else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSheet(Math.round(target)); }
+  else if (e.key === "Home") { e.preventDefault(); goTo(0); }
+  else if (e.key === "End") { e.preventDefault(); goTo(items.length - 1); }
+});
+const prevBtn = document.getElementById("prev"), nextBtn = document.getElementById("next");
+prevBtn.addEventListener("click", () => goTo(Math.round(target) - 1));
+nextBtn.addEventListener("click", () => goTo(Math.round(target) + 1));
+document.getElementById("np-open").addEventListener("click", () => openSheet(Math.round(target)));
+
+let plateIdx = -1;
+function updatePlate() {
+  const i = clamp(Math.round(pos), 0, items.length - 1);
+  if (i === plateIdx) return;
+  plateIdx = i;
+  document.getElementById("np-no").textContent = `${items[i].p.type ? items[i].p.type + " · " : ""}${items[i].no} of ${String(items.length).padStart(2, "0")}`;
+  typeBtns.forEach((b, g) => b.setAttribute("aria-pressed", String(g === groupOf[i])));
+  const ab = typeBtns[groupOf[i]]; if (ab) typesNav.scrollTo({ left: ab.offsetLeft - 16, behavior: "smooth" });
+  document.getElementById("np-name").textContent = items[i].p.name;
+  prevBtn.disabled = i === 0; nextBtn.disabled = i === items.length - 1;
+  interior.setAttribute("aria-activedescendant", "");
+}
+window.addEventListener("resize", layout);
+
+/* Start at the first piece, with a little settle */
+pos = target = 0;
+if (!reduce) items.forEach(it => { it.sway = (Math.random() * 2 - 1) * 2.5; });
+layout(); updatePlate(); kick();
+
+/* Detail sheet with hover/tap zoom */
+const sheet = document.getElementById("sheet");
+const zoom = document.getElementById("zoom"), zoomImg = document.getElementById("zoom-img");
+function openSheet(i) {
+  const p = items[i].p;
+  zoomImg.src = p.img; zoomImg.alt = p.name;
+  document.getElementById("sheet-no").textContent = (p.type ? p.type + " · " : "") + items[i].no;
+  document.getElementById("sheet-title").textContent = p.name;
+  document.getElementById("sheet-desc").textContent = p.desc || "";
+  const dl = document.getElementById("sheet-dl"); dl.innerHTML = "";
+  (p.details || []).forEach(([k, v]) => {
+    const dt = document.createElement("dt"); dt.className = "mono"; dt.textContent = k;
+    const dd = document.createElement("dd"); dd.textContent = v;
+    dl.append(dt, dd);
+  });
+  zoom.classList.remove("on");
+  sheet.hidden = false; document.body.style.overflow = "hidden";
+  document.getElementById("close").focus();
+}
+function closeSheet() { sheet.hidden = true; document.body.style.overflow = ""; interior.focus({ preventScroll: true }); }
+document.getElementById("close").addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !sheet.hidden) closeSheet(); });
+function setOrigin(e) {
+  const r = zoom.getBoundingClientRect();
+  zoomImg.style.transformOrigin = `${clamp((e.clientX - r.left) / r.width, 0, 1) * 100}% ${clamp((e.clientY - r.top) / r.height, 0, 1) * 100}%`;
+}
+zoom.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") { setOrigin(e); zoom.classList.add("on"); } });
+zoom.addEventListener("pointerleave", e => { if (e.pointerType === "mouse") zoom.classList.remove("on"); });
+zoom.addEventListener("pointermove", e => { if (zoom.classList.contains("on")) setOrigin(e); });
+zoom.addEventListener("pointerdown", e => { if (e.pointerType === "mouse") return; setOrigin(e); zoom.classList.toggle("on"); });
+</script>
+</body>
+</html>
