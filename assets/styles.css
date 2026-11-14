@@ -706,35 +706,32 @@ section { padding: 70px 5%; background: #E8EFF6; color: #0B1929; }
   border-radius: var(--r-lg);
   display: flex;
   min-height: 200px;
-  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  transition: background-color var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
-.client-card:hover {
-  border-color: var(--sienna);
+.client-card:hover,
+.client-card:focus-within {
+  background: var(--navy-mid);
+  border-color: var(--navy-mid);
   transform: translateY(-3px);
-  box-shadow: 0 14px 32px rgba(11,25,41,0.10);
+  box-shadow: 0 14px 32px rgba(11,25,41,0.18);
 }
 .client-card a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   padding: 4rem 2rem;
   border-radius: inherit;
   display: grid;
   place-items: center;
 }
-.client-card a > img { grid-area: 1 / 1; transition: opacity var(--transition); }
-.client-card .logo-hover { opacity: 0; }
-.client-card:hover a > img:not(.logo-hover),
-.client-card a:focus-visible > img:not(.logo-hover) { opacity: 0; }
-.client-card:hover .logo-hover,
-.client-card a:focus-visible .logo-hover { opacity: 1; }
 .client-card a:focus-visible { outline: 2px solid var(--sienna); outline-offset: 3px; }
 .client-card img {
   max-height: 70px;
   max-width: 100%;
   object-fit: contain;
+  filter: brightness(0);               /* all-black logo */
+  transition: filter var(--transition);
 }
+.client-card:hover img,
+.client-card:focus-within img { filter: brightness(0) invert(1); } /* all-white logo */
 
 /* ── IN THEIR WORDS (lifted navy, testimonial cards) ────── */
 #testimonials { background: #132540 !important; color: #F8FAFB; }
